@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RPG da Vida - Dark Edition</title>
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#00e5ff">
-<link rel="apple-touch-icon" href="icons/icon-192.png">
+    
+    <!-- PWA & iOS Icons -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#00e5ff">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+
     <style>
         :root {
             --primary: #00e5ff;
@@ -14,7 +17,6 @@
             --danger: #ff5252;
             --warning: #ffab40;
             --success: #69f0ae;
-            /* MUDANÇA CRÍTICA: Fundo dos cards agora é escuro e mais opaco */
             --glass: rgba(0, 20, 40, 0.85); 
             --glass-border: rgba(255, 255, 255, 0.15);
             --gold: #ffd700;
@@ -25,9 +27,7 @@
         body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            /* Fundo padrão caso o vídeo falhe */
             background-color: #000; 
-            /* MUDANÇA CRÍTICA: Texto branco com sombra preta forte (Legibilidade Total) */
             color: #ffffff;
             text-shadow: 0 2px 4px rgba(0, 0, 0, 0.9);
             min-height: 100vh;
@@ -37,20 +37,14 @@
 
         /* Vídeo de Fundo */
         #bgVideo {
-            position: fixed;
-            right: 0; bottom: 0;
+            position: fixed; right: 0; bottom: 0;
             min-width: 100%; min-height: 100%;
-            width: auto; height: auto;
-            z-index: -5;
-            object-fit: cover;
-            background: #000; /* Fundo preto enquanto carrega */
+            width: auto; height: auto; z-index: -5;
+            object-fit: cover; background: #000;
         }
-
-        /* Overlay para escurecer o vídeo se ele for muito claro em alguns pontos */
         .video-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.3); /* 30% de escurecimento extra */
-            z-index: -4; pointer-events: none;
+            background: rgba(0, 0, 0, 0.4); z-index: -4; pointer-events: none;
         }
 
         #app { max-width: 600px; margin: 0 auto; padding: 15px; padding-bottom: 80px; }
@@ -60,33 +54,21 @@
 
         /* UI Components */
         .card {
-            background: var(--glass); /* Fundo escuro */
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5); /* Sombra mais forte */
+            background: var(--glass); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--glass-border); border-radius: 20px; padding: 20px;
+            margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
         }
 
-        h1, h2, h3 { margin-top: 0; color: white; }
+        h1, h2, h3, h4 { margin-top: 0; color: white; }
+        p { line-height: 1.5; opacity: 0.9; }
 
         button {
             background: linear-gradient(45deg, var(--secondary), #00695c);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            padding: 16px;
-            border-radius: 16px;
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: bold;
-            width: 100%;
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            text-shadow: 0 1px 2px black; /* Sombra no texto do botão */
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.2); color: white;
+            padding: 16px; border-radius: 16px; cursor: pointer;
+            font-size: 1rem; font-weight: bold; width: 100%; margin-top: 10px;
+            text-transform: uppercase; letter-spacing: 0.5px;
+            text-shadow: 0 1px 2px black; box-shadow: 0 4px 6px rgba(0,0,0,0.3);
         }
         button:active { transform: scale(0.98); background: var(--primary); color: black; text-shadow: none; }
         
@@ -94,13 +76,10 @@
         button.danger { background: rgba(255, 82, 82, 0.2); border-color: var(--danger); color: var(--danger); }
         button.icon-btn { width: auto; padding: 10px 15px; margin: 0; font-size: 1.2rem; display: inline-flex; align-items: center; justify-content: center; }
 
-        /* Inputs agora são bem escuros para destacar a letra branca */
         input, select {
             width: 100%; padding: 16px; margin: 8px 0 16px 0;
-            border-radius: 12px; 
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(0, 0, 0, 0.6); /* Fundo preto semitransparente */
-            color: white;
+            border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0, 0, 0, 0.6); color: white;
             font-size: 1rem; -webkit-appearance: none;
         }
         input::placeholder { color: rgba(255,255,255,0.5); }
@@ -111,15 +90,12 @@
         .area-btn {
             aspect-ratio: 1 / 1; border-radius: 20px;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            font-size: 1rem; 
-            background: rgba(0,0,0,0.4); /* Mais escuro */
-            border: 2px solid rgba(255,255,255,0.1); 
+            font-size: 1rem; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); 
             cursor: pointer; position: relative; text-align: center; padding: 10px;
         }
         .area-btn:active { background: rgba(255,255,255,0.1); border-color: var(--primary); }
         .area-icon-display { font-size: 2.5rem; margin-bottom: 8px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.8)); }
         
-        /* Modo Edição */
         .area-btn.editing { border-color: var(--warning); border-style: dashed; animation: shake 0.3s; }
         @keyframes shake { 0% { transform: rotate(0deg); } 25% { transform: rotate(1deg); } 75% { transform: rotate(-1deg); } 100% { transform: rotate(0deg); } }
         
@@ -132,7 +108,7 @@
         .bubble-container { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 20px 0; }
         .objective-bubble {
             width: 140px; height: 140px; border-radius: 50%;
-            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(0,0,0,0.8)); /* Bolha mais escura */
+            background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1), rgba(0,0,0,0.8));
             border: 3px solid var(--primary);
             box-shadow: inset 0 0 20px rgba(0,229,255,0.2), 0 5px 15px rgba(0,0,0,0.5);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -144,10 +120,8 @@
 
         /* Lista de Metas */
         .goal-item {
-            display: flex; align-items: center; 
-            background: rgba(0,0,0,0.5); /* Fundo preto semitransparente */
-            padding: 15px; margin: 10px 0; border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; background: rgba(0,0,0,0.5);
+            padding: 15px; margin: 10px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05);
         }
         .goal-item input[type="checkbox"] { width: 24px; height: 24px; margin: 0 15px 0 0; flex-shrink: 0; }
         .goal-text { flex-grow: 1; font-size: 1rem; line-height: 1.4; color: white; }
@@ -183,17 +157,18 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; padding: 20px; }
         .modal-overlay.active { display: flex; }
         .modal-content { width: 100%; max-width: 400px; max-height: 85vh; overflow-y: auto; }
+        
+        /* Lista de Ajuda */
+        .help-list { text-align: left; padding-left: 20px; margin-bottom: 20px; }
+        .help-list li { margin-bottom: 10px; }
 
     </style>
 </head>
 <body>
 
-    <!-- VÍDEO DE FUNDO -->
-    <!-- Certifique-se de que o arquivo 'fundo.mp4' está na mesma pasta -->
     <video autoplay muted loop playsinline id="bgVideo">
         <source src="fundo.mp4" type="video/mp4">
     </video>
-    <!-- Overlay para garantir que o vídeo não fique claro demais -->
     <div class="video-overlay"></div>
 
     <div id="app">
@@ -221,7 +196,11 @@
         <div id="screen-dashboard" class="screen">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
                 <h2 id="welcomeMsg" style="margin:0; font-size: 1.3rem;">Olá</h2>
-                <button onclick="game.logout()" class="secondary icon-btn">🚪</button>
+                <div style="display: flex; gap: 10px;">
+                    <!-- BOTÃO DE AJUDA AQUI -->
+                    <button onclick="game.openHelp()" class="secondary icon-btn" style="background: rgba(0, 229, 255, 0.2); border-color: var(--primary);">❓</button>
+                    <button onclick="game.logout()" class="secondary icon-btn">🚪</button>
+                </div>
             </div>
             
             <div class="card">
@@ -292,6 +271,20 @@
             </button>
         </div>
 
+        <!-- MODAL: Ajuda / Tutorial -->
+        <div id="modal-help" class="modal-overlay">
+            <div class="card modal-content">
+                <h3 style="text-align: center; color: var(--primary);">📖 Como Jogar</h3>
+                <ul class="help-list">
+                    <li><strong>1. Áreas:</strong> São os pilares da sua vida (Ex: Saúde, Carreira). Você pode criar novas ou editar as existentes.</li>
+                    <li><strong>2. Objetivos (Bolhas):</strong> Dentro de cada área, crie objetivos grandes (Ex: Perder 5kg).</li>
+                    <li><strong>3. Metas:</strong> Dentro da bolha, adicione pequenas tarefas diárias. Cada tarefa feita dá XP.</li>
+                    <li><strong>4. Nível & Bônus:</strong> Ao completar 100 XP, você passa de nível e desbloqueia a recompensa que definiu!</li>
+                </ul>
+                <button onclick="document.getElementById('modal-help').classList.remove('active')">Entendi!</button>
+            </div>
+        </div>
+
         <!-- MODAL: Objetivo -->
         <div id="modal-objective" class="modal-overlay">
             <div class="card modal-content">
@@ -311,18 +304,15 @@
             </div>
         </div>
 
-        <!-- MODAL: Área (Criar/Editar) -->
+        <!-- MODAL: Área -->
         <div id="modal-area" class="modal-overlay">
             <div class="card modal-content">
                 <h3 id="modalAreaTitle">Nova Área</h3>
-                <input type="hidden" id="oldAreaName"> <!-- Para edição -->
-                
+                <input type="hidden" id="oldAreaName">
                 <label>Nome da Área</label>
                 <input type="text" id="newAreaName" placeholder="Ex: Carreira" onkeypress="game.handleEnter(event, 'saveArea')">
-                
                 <label>Ícone</label>
                 <input type="text" id="newAreaIcon" value="✨" style="font-size: 2rem; text-align: center; width: 80px;" maxlength="2">
-                
                 <div style="display: flex; gap: 10px;">
                     <button onclick="game.saveArea()">Salvar</button>
                     <button onclick="document.getElementById('modal-area').classList.remove('active')" class="secondary">Cancelar</button>
@@ -333,6 +323,15 @@
     </div>
 
     <script>
+        // --- SERVICE WORKER (PWA) ---
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('SW registrado!', reg))
+                    .catch(err => console.log('SW falhou:', err));
+            });
+        }
+
         // --- DADOS ---
         const placeholdersDB = {
             'Saúde': ['Perder 5kg', 'Correr 5km', 'Beber água', 'Dormir cedo'],
@@ -360,7 +359,7 @@
             },
 
             init: function() {
-                const saved = localStorage.getItem('rpgVidaData_v4');
+                const saved = localStorage.getItem('rpgVidaData_v5');
                 if (saved) {
                     const parsed = JSON.parse(saved);
                     this.data = { ...this.data, ...parsed };
@@ -373,7 +372,7 @@
                 }
             },
 
-            save: function() { localStorage.setItem('rpgVidaData_v4', JSON.stringify(this.data)); },
+            save: function() { localStorage.setItem('rpgVidaData_v5', JSON.stringify(this.data)); },
 
             handleEnter: function(e, action) {
                 if (e.key === 'Enter') {
@@ -389,6 +388,11 @@
                 let match = keys.find(k => area.toLowerCase().includes(k.toLowerCase()));
                 let opts = match ? placeholdersDB[match] : placeholdersDB['default'];
                 return opts[Math.floor(Math.random() * opts.length)];
+            },
+
+            // --- FUNÇÕES DE AJUDA ---
+            openHelp: function() {
+                document.getElementById('modal-help').classList.add('active');
             },
 
             // --- AUTH ---
@@ -718,14 +722,5 @@
         };
         game.init();
     </script>
-<script>
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('./service-worker.js')
-                .then(reg => console.log('Service Worker registrado!', reg))
-                .catch(err => console.log('Falha no Service Worker:', err));
-        });
-    }
-</script>
 </body>
 </html>
